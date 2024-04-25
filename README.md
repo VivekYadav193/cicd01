@@ -1,6 +1,5 @@
 # ml-ci-cd
-Basic example of CI/CD in a ML project.
-
+My First ci cd
 ```
 pip install --upgrade pip
 pip install -r requirements.txt
