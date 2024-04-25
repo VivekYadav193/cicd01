@@ -1,0 +1,70 @@
+schema: '2.0'
+stages:
+  featurization:
+    cmd: python3 code/featurization.py
+    deps:
+    - path: code/featurization.py
+      hash: md5
+      md5: 8707fd684176506dbcd49b0105e6470c
+      size: 1363
+    - path: data/test_data.csv
+      hash: md5
+      md5: c807df8d6d804ab2647fc15c3d40f543
+      size: 18289443
+    - path: data/train_data.csv
+      hash: md5
+      md5: 5b49cf1b57fb9d6102b559d59d99df7c
+      size: 109575994
+    outs:
+    - path: data/norm_params.json
+      hash: md5
+      md5: b749b231e79337a1be67a91878f917a5
+      size: 181917
+    - path: data/processed_test_data.npy
+      hash: md5
+      md5: 9dc45daff4b271e60b0928b73b9c46a1
+      size: 1680128
+    - path: data/processed_train_data.npy
+      hash: md5
+      md5: b0ba456f4c61bc78c0f4da9fcc1d12a2
+      size: 10080128
+  training:
+    cmd: python3 code/train_model.py
+    deps:
+    - path: code/train_model.py
+      hash: md5
+      md5: 9970d4bc5df3547bf482ca7b59b5f849
+      size: 1703
+    - path: data/processed_train_data.npy
+      hash: md5
+      md5: b0ba456f4c61bc78c0f4da9fcc1d12a2
+      size: 10080128
+    outs:
+    - path: data/model.pkl
+      hash: md5
+      md5: aea5ee87f898e653cb8d07d52a089713
+      size: 835608
+    - path: metrics/train_metric.json
+      hash: md5
+      md5: fa9dd0cabb85e61440fcbab181ca0e36
+      size: 37
+  eval:
+    cmd: python3 code/eval.py
+    deps:
+    - path: code/eval.py
+      hash: md5
+      md5: ded087f06525f05f78599a57b3d2f0fe
+      size: 1869
+    - path: data/model.pkl
+      hash: md5
+      md5: aea5ee87f898e653cb8d07d52a089713
+      size: 835608
+    - path: data/processed_test_data.npy
+      hash: md5
+      md5: 9dc45daff4b271e60b0928b73b9c46a1
+      size: 1680128
+    outs:
+    - path: metrics/eval.json
+      hash: md5
+      md5: bd5ee2f3ce38e6560715d2aaa2db16f7
+      size: 84

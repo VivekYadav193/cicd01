@@ -1,0 +1,29 @@
+name: CML-CI
+on: [push]
+jobs:
+  train-and-report:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      repository-projects: write
+    container: docker://ghcr.io/iterative/cml:0-dvc2-base1
+    steps:
+      - uses: actions/checkout@v3
+      - name: Train model
+        env:
+          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt 
+
+          python3 code/get_data.py
+          dvc repro 
+
+          # Create CML report
+          echo '### Model Metrics' >> report.md
+          cat metrics/metrics.txt >> report.md
+
+          echo '### Confusion Matrix' >> report.md
+          echo '![](./metrics/confmat.png "Confusion Matrix")' >> report.md
+          cml comment create report.md
